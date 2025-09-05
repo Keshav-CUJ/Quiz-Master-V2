@@ -1,0 +1,63 @@
+# ───── PYTHON BACKEND ─────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.egg
+*.egg-info/
+dist/
+build/
+
+
+*.log
+.env
+*.env
+venv/
+quiz-env/
+env/
+celerybeat-schedule
+
+
+# ───── NODE FRONTEND ─────
+node_modules/
+dist/
+.env.local
+.env.production
+.env.development
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+coverage/
+
+# ───── GENERAL ─────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+
+.DS_Store
+node_modules
+/dist
+
+
+# local env files
+.env.local
+.env.*.local
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
