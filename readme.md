@@ -1,18 +1,30 @@
-# 🎓 Quiz Master V2
+# Quiz Master 
 
-## 📌 Overview
+## Overview
 
-**Quiz Master V2** is a more advanced version of Quiz Master with the following features:
+**Quiz App** is a **multi-user quiz management platform** designed to streamline quiz creation and assessment.  
+
+## Functionalities
+
+- Admin/Instructor can create new subject, chapters, quizzes and questions in hierarchical manner.
+- Admin can view all summary statistics for a particular quiz; e.g. how many students gave the quiz, maximum scores etc.
+- Admin can setup deadlines for quizzes which is helpful for reminders related tasks.
+- Student will have access to all subjects, chapters, quizzes created by Admin and can attempt quizzes only once, before deadlines.
+- Student will recieve email notifications for all upcoming quizzes.
+- Student will recieve monthly report of progress through email.
+- Student can download progress report as a CSV for his/her usecase.
+
+## Technical Features
 
 1. Full frontend built using **Vue CLI**
-2. Robust **API communication**, caching, and performance optimization
-3. **Background jobs**, including scheduled and user-triggered tasks
-4. **JWT-based authentication** system
+2. Robust **API communication**, caching, and performance optimization achieved using **Redis**.
+3. **Background jobs**, including scheduled and user-triggered tasks such as reminders and CSV exports acheived using **Celery** and Redis.
+4. **JWT-based authentication** system.
 5. Clean and scalable **RESTful API** design
 
 ---
 
-## 🛠️ Installation & Setup
+## Installation & Setup
 
 ### 1️⃣ Clone the Repository
 
@@ -25,14 +37,14 @@ cd quiz-app/backend
 
 ### 2️⃣ Create & Activate a Virtual Environment (Skip if already using one)
 
-#### 🪟 On Windows
+#### On Windows
 ```bash
 python -m venv venv
 Set-ExecutionPolicy Unrestricted -Scope Process   # If aliasing issue occurs
 venv\Scripts\activate
 ```
 
-#### 🐧 On macOS/Linux
+#### On macOS/Linux
 ```bash
 python3 -m venv venv
 source venv/bin/activate
@@ -50,7 +62,7 @@ pip install -r requirements.txt
 
 ### 4️⃣ Caching & Background Jobs Require Redis Server
 
-#### 🪟 On Windows  
+#### On Windows  
 Use **WSL2** as Redis is Linux-native.
 
 ```bash
@@ -58,7 +70,7 @@ wsl --install
 # Restart your computer if prompted
 ```
 
-#### 🐧 On macOS/Linux  
+#### On macOS/Linux  
 Redis is natively supported.
 
 ---
@@ -73,7 +85,7 @@ sudo apt-get install net-tools
 netstat -tl
 ```
 
-> ✅ If `127.0.0.1:6379` is listening, Redis is running correctly.
+> If `127.0.0.1:6379` is listening, Redis is running correctly.
 
 ---
 
@@ -144,7 +156,7 @@ celery -A task worker --loglevel=info -P eventlet
 3. Open terminal and run:
 
 ```bash
-cd quiz-app/frontend
+cd ../
 npm install
 npm install @vue/cli -g
 vue serve
@@ -154,23 +166,14 @@ vue serve
 
 ---
 
-## 🔐 Credentials
+## Dummy Credentials
 
-### 🛡️ Admin Login
+### Admin Login
 - **Username**: `admin`  
 - **Password**: `1234`
 
-### 👤 Dummy User
+### Dummy User
 - **Username**: `user1`  
 - **Password**: `user1`
-
----
-
-## 🎉 Features
-
-- 📬 You’ll receive emails for reminders and summaries
-- 📦 You can **export CSV** after attempting at least one quiz
-- ⚡ API responses are **cached** using Redis
-- 🖥️ Enjoy a full **Single Page Application (SPA)** experience!
 
 ---
