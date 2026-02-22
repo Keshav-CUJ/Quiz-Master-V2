@@ -16,7 +16,7 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['JWT_SECRET_KEY'] = 'another_super_secret'
     app.config['CACHE_TYPE'] = 'RedisCache'  ##redis for cacheing
-    app.config['CACHE_REDIS_URL'] = 'redis://127.0.0.1:6379/3'
+    app.config['CACHE_REDIS_URL'] = 'redis://redis:6379/3'
     
     cache.init_app(app)
     CORS(app, supports_credentials=True)
@@ -36,4 +36,4 @@ def create_app():
 # Dev server start
 if __name__ == '__main__':
     app = create_app()
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)
