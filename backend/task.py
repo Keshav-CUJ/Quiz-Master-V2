@@ -10,23 +10,31 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import os
-
+from dotenv import load_dotenv
 from app import  create_app
 from database import User, Score, Quiz, Chapter, Subject, Question, QuestionStatus
-
 import time
-celApp= Celery('tasks', broker='redis://127.0.0.1:6379/1', backend='redis://127.0.0.1:6379/1')
+
+load_dotenv()
+
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
+H = os.getenv("H")
+M = os.getenv("M")
+D = os.getenv("D")
+YOUR_EMAIL = os.getenv("YOUR_EMAIL")
+
+celApp= Celery('tasks', broker='redis://redis:6379/1', backend='redis://redis:6379/1')
 celApp.conf.enable_utc=False
 celApp.conf.timezone='Asia/Kolkata'
 
 @celApp.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
     sender.add_periodic_task(
-        crontab(hour=17,minute=11),
+        crontab(hour=H,minute=M),
         send_unattempted_quiz_reminders.s()
     )
     sender.add_periodic_task(
-        crontab(day_of_month=30, hour=17, minute=11),  # adjust time as needed
+        crontab(day_of_month=D, hour=H, minute=M),  # adjust time as needed
         send_monthly_summary.s()
     )
     
@@ -52,7 +60,7 @@ def send_unattempted_quiz_reminders():
 
             message += "\nPlease log in and complete them!\n"
 
-            send_email("<your_email>",user.email, "📚 Unattempted Quizzes Reminder", message,"quiz.png")
+            send_email(YOUR_EMAIL,user.email, "📚 Unattempted Quizzes Reminder", message,"quiz.png")
 
 
 @celApp.task
@@ -72,7 +80,7 @@ def send_monthly_summary():
                 
               month_name = datetime.now().strftime("%B")  
               message = f"Hi {user.username},\nYour quizz summary report for {month_name} month is here.\nPlease find the attachment.\n\n Regards\n Admin from Quiz Master"
-              send_email("<your_email>",user.email, "📊 Your Monthly Quiz Summary Report", message,tmp_path)
+              send_email(YOUR_EMAIL,user.email, "📊 Your Monthly Quiz Summary Report", message,tmp_path)
  
 @celApp.task(bind=True)
 def export_user_csv(self, user_id):
@@ -218,7 +226,7 @@ def send_email(sender,receiver, subject, message, attachment):
     smtp_server='smtp.gmail.com'
     smtp_port=587
     smtp_username=sender
-    smtp_password='<your_app_password>'
+    smtp_password=SMTP_PASSWORD
     
     with smtplib.SMTP(smtp_server,smtp_port) as server:
         server.starttls()
