@@ -60,6 +60,4 @@ services:
     envVars:
       - key: VITE_API_URL
         fromService:
-          type: web
-          name: quiz-backend
-          property: url
+          value: https://quiz-backend.onrender.com
