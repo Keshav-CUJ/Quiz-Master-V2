@@ -59,5 +59,4 @@ services:
     dockerfilePath: ./frontend/Dockerfile
     envVars:
       - key: VITE_API_URL
-        fromService:
-          value: https://quiz-backend.onrender.com
+        value: https://quiz-backend.onrender.com
