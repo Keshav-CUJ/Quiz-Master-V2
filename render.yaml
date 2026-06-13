@@ -1,0 +1,64 @@
+services:
+  # 1. REDIS SERVER
+  - type: redis
+    name: quiz-redis
+    ipAllowList: [] 
+    plan: free
+
+  # 2. FLASK BACKEND
+  - type: web
+    name: quiz-backend
+    env: docker
+    plan: free
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    envVars:
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: quiz-redis
+          property: connectionString
+
+  # 3. CELERY WORKER
+  - type: worker
+    name: quiz-celery-worker
+    env: docker
+    plan: free
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    # Removed '-P eventlet' since Render is a Linux environment
+    dockerCommand: celery -A task worker --loglevel=info
+    envVars:
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: quiz-redis
+          property: connectionString
+
+  # 4. CELERY BEAT (Added based on your docker-compose)
+  - type: worker
+    name: quiz-celery-beat
+    env: docker
+    plan: free
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    dockerCommand: celery -A task beat --loglevel=info
+    envVars:
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: quiz-redis
+          property: connectionString
+
+  # 5. VUE FRONTEND
+  - type: web
+    name: quiz-frontend
+    env: static
+    buildCommand: npm run build
+    publishPath: ./frontend/dist 
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: quiz-backend
+          property: url
