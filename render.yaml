@@ -53,9 +53,10 @@ services:
   # 5. VUE FRONTEND
   - type: web
     name: quiz-frontend
-    env: static
-    buildCommand: npm run build
-    publishPath: ./frontend/dist 
+    env: docker                  # 👈 Changed from 'static' to 'docker'
+    plan: free
+    dockerContext: ./frontend     # 👈 Points Render to your frontend folder
+    dockerfilePath: ./frontend/Dockerfile
     envVars:
       - key: VITE_API_URL
         fromService:
