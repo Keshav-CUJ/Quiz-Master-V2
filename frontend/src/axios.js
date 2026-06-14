@@ -3,7 +3,7 @@ import axios from 'axios'
 // const BACKEND_URL = process.env.VUE_APP_API_URL
 
 const api = axios.create({
-  baseURL: "https://quiz-backend-tqme.onrender.com/",
+  baseURL: "https://quiz-backend-tqme.onrender.com",
 })
 
 api.interceptors.request.use(config => {
