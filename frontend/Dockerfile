@@ -22,4 +22,4 @@ COPY --from=build-stage /app/dist /usr/share/nginx/html
 
 # Tell Nginx to look at Render's dynamic $PORT environment variable 
 # and start the server instead of a hardcoded port
-CMD ["sh", "-c", "exec nginx -g 'daemon off;' -c /etc/nginx/nginx.conf -g 'listen 0.0.0.0:'${PORT:-80}';'"]
+CMD ["sh", "-c", "echo \"server { listen $PORT; location / { root /usr/share/nginx/html; index index.html; try_files \\$uri \\$uri/ /index.html; } }\" > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"]
