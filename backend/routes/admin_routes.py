@@ -6,6 +6,8 @@ from datetime import datetime
 from flask_jwt_extended import jwt_required
 from cachext import cache
 import logging
+from flask import g
+
 logger = logging.getLogger(__name__)
 
 admin_routes = Blueprint('admin_routes', __name__)
@@ -90,12 +92,24 @@ def delete_subject(subject_id):
 @cache.cached(timeout=300, key_prefix='all_chapters')
 def get_chapters():
     
+    g.cache_status = "MISS"
     chapters = Chapter.query.all()
     print("🔴🔴🔴🔴chapters Quried from db🔴🔴🔴🔴🔴🔴🔴🔴")  ###cacheing implemented
     return jsonify([
-        {"id": c.id, "name": c.name, "description": c.description, "subject_id": c.subject_id, "subject_name": c.subject.name, "cache-miss": "true",}
+        {"id": c.id, "name": c.name, "description": c.description, "subject_id": c.subject_id, "subject_name": c.subject.name,}
         for c in chapters
     ])
+
+@admin_routes.after_request
+def add_cache_header(response):
+    # Only execute this logic for the 'get_chapters' endpoint inside admin_routes
+    # Format is usually 'blueprint_name.function_name'
+    if request.endpoint == 'admin_routes.get_chapters':
+        status = getattr(g, 'cache_status', 'HIT')
+        response.headers['X-Cache'] = status
+        
+    return response
+
 
 @admin_routes.route("/api/chapters", methods=["POST"])
 @jwt_required()
