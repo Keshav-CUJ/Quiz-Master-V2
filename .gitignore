@@ -1,0 +1,10 @@
+__pycache__/
+*.env
+venv/
+celerybeat-schedule
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.vscode
