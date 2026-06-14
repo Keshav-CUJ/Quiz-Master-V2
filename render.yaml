@@ -59,4 +59,4 @@ services:
     dockerfilePath: ./frontend/Dockerfile
     envVars:
       - key: VUE_APP_API_URL
-        value: https://quiz-backend.onrender.com
+        value: https://quiz-backend-tqme.onrender.com/
