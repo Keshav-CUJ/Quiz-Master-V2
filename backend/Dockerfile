@@ -20,8 +20,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy project files
 COPY . .
 
-# Expose the port Flask runs on
-EXPOSE 5000
-
-# Command to run the application
-CMD ["python", "app.py"]
+# Dynamically bind to the port Render gives your container
+CMD ["sh", "-c", "gunicorn -b 0.0.0.0:$PORT \"app:create_app()\""]

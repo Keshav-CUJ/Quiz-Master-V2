@@ -22,8 +22,9 @@ H = os.getenv("H")
 M = os.getenv("M")
 D = os.getenv("D")
 YOUR_EMAIL = os.getenv("YOUR_EMAIL")
+REDIS_URL = os.getenv("REDIS_URL")
 
-celApp= Celery('tasks', broker='redis://redis:6379/1', backend='redis://redis:6379/1')
+celApp= Celery('tasks', broker=f'{REDIS_URL}/1', backend=f'{REDIS_URL}/1')
 celApp.conf.enable_utc=False
 celApp.conf.timezone='Asia/Kolkata'
 

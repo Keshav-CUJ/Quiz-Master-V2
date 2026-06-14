@@ -58,5 +58,5 @@ services:
     dockerContext: ./frontend     # 👈 Points Render to your frontend folder
     dockerfilePath: ./frontend/Dockerfile
     envVars:
-      - key: VITE_API_URL
+      - key: VUE_APP_API_URL
         value: https://quiz-backend.onrender.com

@@ -6,8 +6,14 @@ from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
 from flask_caching import Cache
 from cachext import cache
+from dotenv import load_dotenv
+import os
 
 migrate = Migrate() #for direct migrate imports
+
+load_dotenv()
+
+REDIS_URL= os.getenv("REDIS_URL")
 
 def create_app():
     app = Flask(__name__)
@@ -16,7 +22,7 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['JWT_SECRET_KEY'] = 'another_super_secret'
     app.config['CACHE_TYPE'] = 'RedisCache'  ##redis for cacheing
-    app.config['CACHE_REDIS_URL'] = 'redis://redis:6379/3'
+    app.config['CACHE_REDIS_URL'] = f'{REDIS_URL}/3'
     
     cache.init_app(app)
     CORS(app, supports_credentials=True)

@@ -1,18 +1,25 @@
-# /frontend/Dockerfile
-FROM node:18-slim
+# --- STAGE 1: Build the Vue application ---
+FROM node:18-slim AS build-stage
 
 WORKDIR /app
 
-# Install Vue CLI globally
-RUN npm install -g @vue/cli
-
-# Copy package files from the current context (which is ./frontend)
+# Copy package files and install dependencies
 COPY package*.json ./
 RUN npm install
 
-# Copy the rest of the frontend code
+# Copy the rest of the frontend source code
 COPY . .
 
-EXPOSE 8080
+# Run the production build command (generates the /dist folder)
+RUN npm run build
 
-CMD ["npm", "run", "serve"]
+
+# --- STAGE 2: Serve the app with Nginx ---
+FROM nginx:alpine AS production-stage
+
+# Copy the compiled static HTML/JS/CSS files from Stage 1 into Nginx
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+
+# Tell Nginx to look at Render's dynamic $PORT environment variable 
+# and start the server instead of a hardcoded port
+CMD ["sh", "-c", "exec nginx -g 'daemon off;' -c /etc/nginx/nginx.conf -g 'listen 0.0.0.0:'${PORT:-80}';'"]
