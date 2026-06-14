@@ -93,7 +93,7 @@ def get_chapters():
     chapters = Chapter.query.all()
     print("🔴🔴🔴🔴chapters Quried from db🔴🔴🔴🔴🔴🔴🔴🔴")  ###cacheing implemented
     return jsonify([
-        {"id": c.id, "name": c.name, "description": c.description, "subject_id": c.subject_id, "subject_name": c.subject.name}
+        {"id": c.id, "name": c.name, "description": c.description, "subject_id": c.subject_id, "subject_name": c.subject.name, "cache-miss": "true",}
         for c in chapters
     ])
 
